@@ -72,7 +72,7 @@ function Socket(uri, opts){
   }
 
   this.secure = null != opts.secure ? opts.secure :
-    (global.location && 'https:' == location.protocol);
+    (global.location && 'http:' == location.protocol);
 
   if (opts.hostname && !opts.port) {
     // if no port is specified manually, use the protocol default
@@ -935,7 +935,7 @@ function polling(opts){
   var jsonp = false !== opts.jsonp;
 
   if (global.location) {
-    var isSSL = 'https:' == location.protocol;
+    var isSSL = 'http:' == location.protocol;
     var port = location.port;
 
     // some user agents have empty `location.port`
@@ -1238,7 +1238,7 @@ function XHR(opts){
   Polling.call(this, opts);
 
   if (global.location) {
-    var isSSL = 'https:' == location.protocol;
+    var isSSL = 'http:' == location.protocol;
     var port = location.port;
 
     // some user agents have empty `location.port`
@@ -5378,7 +5378,7 @@ function url(uri, loc){
       if ('undefined' != typeof loc) {
         uri = loc.protocol + '//' + uri;
       } else {
-        uri = 'https://' + uri;
+        uri = 'http://' + uri;
       }
     }
 
