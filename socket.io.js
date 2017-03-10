@@ -64,7 +64,7 @@ function Socket(uri, opts){
   if (uri) {
     uri = parseuri(uri);
     opts.hostname = uri.host;
-    opts.secure = uri.protocol == 'http' || uri.protocol == 'wss';
+    opts.secure = uri.protocol == 'https' || uri.protocol == 'wss';
     opts.port = uri.port;
     if (uri.query) opts.query = uri.query;
   } else if (opts.host) {
@@ -72,7 +72,7 @@ function Socket(uri, opts){
   }
 
   this.secure = null != opts.secure ? opts.secure :
-    (global.location && 'http:' == location.protocol);
+    (global.location && 'https:' == location.protocol);
 
   if (opts.hostname && !opts.port) {
     // if no port is specified manually, use the protocol default
@@ -935,7 +935,7 @@ function polling(opts){
   var jsonp = false !== opts.jsonp;
 
   if (global.location) {
-    var isSSL = 'http:' == location.protocol;
+    var isSSL = 'https:' == location.protocol;
     var port = location.port;
 
     // some user agents have empty `location.port`
@@ -1238,7 +1238,7 @@ function XHR(opts){
   Polling.call(this, opts);
 
   if (global.location) {
-    var isSSL = 'http:' == location.protocol;
+    var isSSL = 'https:' == location.protocol;
     var port = location.port;
 
     // some user agents have empty `location.port`
@@ -1838,7 +1838,7 @@ Polling.prototype.write = function(packets){
 
 Polling.prototype.uri = function(){
   var query = this.query || {};
-  var schema = this.secure ? 'http' : 'http';
+  var schema = this.secure ? 'https' : 'http';
   var port = '';
 
   // cache busting is forced
@@ -1853,7 +1853,7 @@ Polling.prototype.uri = function(){
   query = parseqs.encode(query);
 
   // avoid port if default for schema
-  if (this.port && (('http' == schema && this.port != 443) ||
+  if (this.port && (('https' == schema && this.port != 443) ||
      ('http' == schema && this.port != 80))) {
     port = ':' + this.port;
   }
@@ -3887,7 +3887,7 @@ exports.decode = function(qs){
  * @api private
  */
 
-var re = /^(?:(?![^:@]+:[^:@\/]*@)(http|http|ws|wss):\/\/)?((?:(([^:@]*)(?::([^:@]*))?)?@)?((?:[a-f0-9]{0,4}:){2,7}[a-f0-9]{0,4}|[^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/;
+var re = /^(?:(?![^:@]+:[^:@\/]*@)(http|https|ws|wss):\/\/)?((?:(([^:@]*)(?::([^:@]*))?)?@)?((?:[a-f0-9]{0,4}:){2,7}[a-f0-9]{0,4}|[^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/;
 
 var parts = [
     'source', 'protocol', 'authority', 'userInfo', 'user', 'password', 'host', 'port', 'relative', 'path', 'directory', 'file', 'query', 'anchor'
@@ -5373,12 +5373,12 @@ function url(uri, loc){
       }
     }
 
-    if (!/^(http?|wss?):\/\//.test(uri)) {
+    if (!/^(https?|wss?):\/\//.test(uri)) {
       debug('protocol-less url %s', uri);
       if ('undefined' != typeof loc) {
         uri = loc.protocol + '//' + uri;
       } else {
-        uri = 'http://' + uri;
+        uri = 'https://' + uri;
       }
     }
 
